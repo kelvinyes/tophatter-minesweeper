@@ -1,5 +1,6 @@
 import random
 import sys
+import time
 
 def print_mines_layout():
     global visible_values
@@ -191,8 +192,6 @@ def get_possible_squares():
                 lst.append((x, y))
     
     return lst
-    
-
 
 def pick(row, col):
     global visible_values
@@ -224,26 +223,23 @@ if __name__ == "__main__":
     
     #Running a solver for the game.
     if (sys.argv[1] == "solve"):
+        t0 = time.process_time()
         print("Attempting to solve 100,000 puzzles.")
         num_solved = 0
         for i in range(1, 100001):
-            if (i == 100000):
-                print("Currently working on game #" + str(i) + "." + "\nCurrently solved" + str(num_solved / (i)) + "puzzles.", end='\r')
-                print()
             if (solve()):
                 num_solved += 1
-            if (i != 100000):
-                print("Currently working on game #" + str(i + 1) + "." + "\nCurrently solved " + str(num_solved / (i)) + "% of puzzles.", end='\r')
-                print()
-
+            print("Currently solved " + str(num_solved / (i)) + "% of " + str(i) + " puzzles.", end='\r')
             all_values = [[0 for i in range(10)] for x in range(10)]
             visible_values = [["X" for i in range(10)] for x in range(10)] 
             confirmed_mines = []
             checked_squares = []
-
             setup()
+        t1 = time.process_time() - t0
+        print()
+        print()
+        print("Successfully solved " + str(num_solved) + " out of 100,000 puzzles. Time elapsed: " + str(t1) + " seconds.")
         
-
     #Playing the game itself.
     if (sys.argv[1] == "play"):
         print("")
